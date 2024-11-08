@@ -1,0 +1,173 @@
+Tiszasziget-net: 
+SW-tisza-1: 
+Switch>ena 
+Switch#conf t 
+Switch(config)#ip default-gateway 187.20.0.1  
+ 
+Switch(config)#int vlan 1 
+Switch(config-if)#ip address 187.20.0.5 255.255.255.128 
+Switch(config-if)#no shutdown  
+Switch(config-if)#exit 
+ 
+Switch(config)#enable secret PROJEKT22 
+banner motd "szia" 
+SW-tisza-2 
+Switch>en 
+Switch#conf t 
+Switch(config)#ip default-gateway 187.20.0.1 
+ 
+Switch(config)#int vlan 1 
+Switch(config-if)#ip address 187.20.0.6 255.255.255.128 
+Switch(config-if)#no shutdown 
+Switch(config-if)#exit 
+ 
+Switch(config)#enable secret PROJEKT22 
+Switch(config)#username ADMIN2 password GDszeged22 
+Switch(config)#ip domain-name GDszeged.hu 
+Switch(config)#hostname SW-tisza-2 
+SW-tisza-2(config)#crypto key generate rsa  
+How many bits in the modulus [512]: 1024 
+Switch(config)#line vty 0 15 
+Switch(config-line)#transport input ssh  
+Switch(config-line)#login local 
+Switch(config-line)#exit 
+Switch(config)#banner motd "szia" 
+ 
+ 
+R-Tiszasziget: 
+Router>en 
+Router#conf t 
+Router(config)#int g0/0/0 
+Router(config-if)#ip address 187.20.0.170 255.255.255.252 
+Router(config-if)#no shutdown 
+Router(config)#exit 
+ 
+Router(config-if)#int g0/0 
+Router(config-if)#ip address 187.20.0.1 255.255.255.128 
+Router(config-if)#no shutdown 
+Router(config)#exit 
+ 
+Router(config)#ip route 0.0.0.0 0.0.0.0 g0/0/0 
+enable secret PROJEKT1 
+Router(config)#end 
+ 
+Router#copy running-config startup-config 
+Router#copy running-config tftp: 
+Address or name of remote host []? 187.20.0.2 
+ 
+Router#conf t 
+Router(config)#username ADMIN1 password GDszeged22 
+Router(config)#line vty 0 15 
+Router(config-line)#transport input ssh 
+Router(config-line)#login local 
+
+
+
+R-szeged: 
+Router>enable 
+Router#configure terminal 
+Router(config)#interface GigabitEthernet0/3/0 
+Router(config-if)#no shutdown  
+Router(config-if)#exit 
+Router(config)#ip route 0.0.0.0 0.0.0.0 gigabitEthernet 0/3/0 
+Router(config)#interface GigabitEthernet0/3/0 
+Switch(config)#enable secret PROJEKT22 
+Switch(config)#line vty 0 15 
+Switch(config-line)#login local 
+Router>en 
+Router#configure t 
+Router(config)#int gigabitEthernet 0/0/0 
+Router(config-if)#ip address 187.20.0.169 255.255.255.252 
+Router(config-if)#no sh 
+Router(config-if)#exit 
+Router(config)#int gigabitEthernet 0/1/0 
+Router(config-if)#ip address 187.20.0.165 255.255.255.252 
+Router(config-if)#no sh 
+Router(config-if)#exit 
+Router(config)#banner motd "hello" 
+Router(config)#interface gigabitEthernet 0/3/0 
+Router(config-if)#exit 
+Router(config)#interface gigabitEthernet 0/2/0 
+Router(config-if)#ip address 187.20.0.161 255.255.255.252 
+Router(config-if)#no sh 
+Router(config-if)#exit 
+Router(config)#ip route 187.20.0.0 255.255.255.128 gigabitEthernet 0/0/0 
+Router(config)#ip route 187.20.0.128 255.255.255.224 gigabitEthernet 0/1/0 
+Router(config)#ip route 187.20.0.172 255.255.255.252 gigabitEthernet 0/2/0 
+Router(config)#ip route 192.168.50.0 255.255.255.0 gigabitEthernet 0/2/0 
+Router(config)#line console 0 
+Router(config-line)#password PROJEKT 
+Router(config-line)#login 
+Router(config-line)#exit 
+Router(config)#do copy run st 
+Destination filename [startup-config]?  
+Router(config)#end 
+Router#copy running-config tftp:  
+Address or name of remote host []? 187.20.0.2 
+ 
+ 
+R-UJSZENTIVAN: 
+Router(config)#int g0/0/0 
+Router(config-if)#ip add 187.20.0.166 255.255.255.252 
+Router(config-if)#no shutdown 
+Router(config-if)#exit 
+Router(config)#int g0/0 
+Router(config-if)#ip add 187.20.0.129 255.255.255.224 
+Router(config-if)#no shutdown 
+Router(config-if)#exit 
+Router(config)#ip route 0.0.0.0 0.0.0.0 g0/0/0 
+Router(config)#ena secret PROJEKT1 
+Router(config)#banner motd "SCYEAH" 
+Router(config)#username OKOSKA password GDszeged22 
+Router(config)#ip domain-name gd.hu  
+Router(config)#crypto key generate rsa 
+Router(config)#hostname R-UJSZENTIVAN 
+R-UJSZENTIVAN(config)#crypto key generate rsa 
+How many bits in the modulus [512]: 1024 
+R-UJSZENTIVAN(config)#line vty 0 15 
+R-UJSZENTIVAN(config-line)#transport input ssh 
+R-UJSZENTIVAN(config-line)#login local 
+R-UJSZENTIVAN#copy running-config startup-config 
+R-UJSZENTIVAN#copy running-config tftp:  
+Address or name of remote host []? 187.20.0.2 
+Destination filename [R-UJSZENTIVAN-confg]?  
+ 
+Writing running-config......!! 
+[OK - 1374 bytes] 
+1374 bytes copied in 15.036 secs (91 bytes/sec) 
+ 
+ 
+ 
+ 
+SW-ujszentivan: 
+ 
+ 
+Switch>ena 
+Switch#conf t 
+Switch(config)#int vlan 1 
+Switch(config-if)#ip add 187.20.0.158 255.255.255.224 
+Switch(config)#username ADMIN1 password GDszeged22 
+Switch(config)#line vty 0 15 
+Switch(config-line)#login local 
+Switch(config)#enable password PROJEKT1 
+Switch(config)#ip default-gateway 187.20.0.129 
+Switch(config)#exit 
+Switch#copy ru st 
+Destination filename [startup-config]?  
+Building configuration... 
+[OK] 
+ 
+ 
+R-KUBEKHAZA: 
+ 
+Router(config)#hostname R-KUBEKHAZA 
+R-KUBEKHAZA(config)#interface gigabitEthernet 0/0/0 
+R-KUBEKHAZA(config-if)#ip address 187.20.0.162 255.255.255.252 
+R-KUBEKHAZA(config-if)#no sh 
+R-KUBEKHAZA(config-if)#exit 
+R-KUBEKHAZA(config)#ip route 0.0.0.0 0.0.0.0 gigabitEthernet 0/0/0 
+R-KUBEKHAZA(config)#ip route 192.168.50.0 255.255.255.0 gigabitEthernet 0/0 
+R-KUBEKHAZA(config)#interface gigabitEthernet 0/0 
+R-KUBEKHAZA(config-if)#ip address 187.20.0.173 255.255.255.252 
+R-KUBEKHAZA(config-if)#no shutdown  
+R-KUBEKHAZA(config-if)#exit 
